@@ -1,0 +1,1 @@
+[2026-05-26 18:56:03] Account created with balance: 10000.000000

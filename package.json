@@ -1,0 +1,20 @@
+{
+  "name": "banksphere-banking-system",
+  "version": "2.0.0",
+  "description": "Bank Sphere — Modern Banking System powered by C++ Binary Search Tree and Separate Chaining Hash Table",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build:cpp": "cd BankSphere && g++ -std=c++17 src/api_bridge.cpp src/bst/AccountBST.cpp src/bst/AccountNode.cpp src/hashtable/AuthTable.cpp src/hashtable/BucketNode.cpp src/hashtable/CredentialNode.cpp src/utils/FileUtils.cpp -Iinclude -o BankSphereBridge.exe && g++ -std=c++17 src/main.cpp src/bst/AccountBST.cpp src/bst/AccountNode.cpp src/hashtable/AuthTable.cpp src/hashtable/BucketNode.cpp src/hashtable/CredentialNode.cpp src/modules/AdminModule.cpp src/modules/CustomerModule.cpp src/modules/StaffModule.cpp src/utils/FileUtils.cpp -Iinclude -o BankSphere.exe"
+  },
+  "keywords": [
+    "banking",
+    "cpp",
+    "dsa",
+    "binary-search-tree",
+    "hash-table",
+    "modern-dashboard"
+  ],
+  "author": "Bank Sphere Engineering Team",
+  "license": "MIT"
+}

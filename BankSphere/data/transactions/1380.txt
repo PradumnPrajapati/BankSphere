@@ -1,0 +1,2 @@
+[2026-09-30 01:27:05] Account created with balance: 5000.000000
+[2026-09-30 01:38:55] Account created with balance: 100000.000000
