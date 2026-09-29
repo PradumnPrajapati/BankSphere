@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bank Sphere — Modern Core Banking System</title>
+  <title>Bank Sphere — Ultra-Modern Core Banking & Ledger System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Ambient Aurora Glow Orbs -->
+  <div class="ambient-glow glow-top-left"></div>
+  <div class="ambient-glow glow-top-right"></div>
+  <div class="ambient-glow glow-bottom-center"></div>
+
   <!-- Global Toast Notification Center -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -32,13 +37,121 @@
     </div>
   </div>
 
-  <!-- AUTH VIEW (Login Page) -->
+  <!-- Profile Edit & Name Management Modal ("Give Name as Well") -->
+  <div id="profile-modal" class="modal-backdrop hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-icon-badge primary">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <h3 class="modal-title">Update Account Profile Name</h3>
+          <p class="modal-desc">Set or customize your account legal holder name and address. Synced instantly with the C++ BST storage.</p>
+        </div>
+      </div>
+      <form id="profile-edit-form" class="modal-body form-body">
+        <div class="form-group">
+          <label for="edit-profile-name">Full Customer / Account Name</label>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="edit-profile-name" required placeholder="e.g. Pradumn Prajapati" autocomplete="name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-profile-address">Registered Residential Address</label>
+          <div class="input-icon-wrap">
+            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <input type="text" id="edit-profile-address" required placeholder="e.g. Sector Alpha 1, Greater Noida, UP 201310">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="profile-cancel-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="profile-save-btn" class="btn btn-primary">Save Profile Name</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Official Transaction Voucher / Receipt Modal -->
+  <div id="receipt-modal" class="modal-backdrop hidden">
+    <div class="modal-dialog receipt-dialog">
+      <div class="receipt-paper" id="receipt-paper">
+        <div class="receipt-header">
+          <div class="receipt-brand">
+            <div class="logo-icon small">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 6l7-3 7 3"/><path d="M4 10v11"/><path d="M20 10v11"/></svg>
+            </div>
+            <div>
+              <h4>Bank Sphere</h4>
+              <span class="receipt-sub">Official Digital Ledger Voucher</span>
+            </div>
+          </div>
+          <div class="receipt-status-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>VERIFIED BST TRANSACTION</span>
+          </div>
+        </div>
+
+        <div class="receipt-divider"></div>
+
+        <div class="receipt-amount-display">
+          <span class="label">Total Amount Processed</span>
+          <h2 id="receipt-amount">₹0.00</h2>
+          <span class="badge-tx" id="receipt-type">Credit</span>
+        </div>
+
+        <div class="receipt-grid">
+          <div class="receipt-row">
+            <span class="r-label">Transaction Reference</span>
+            <span class="r-val mono" id="receipt-ref">TXN-90241-BST</span>
+          </div>
+          <div class="receipt-row">
+            <span class="r-label">Timestamp</span>
+            <span class="r-val mono" id="receipt-date">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="r-label">Account Number</span>
+            <span class="r-val mono" id="receipt-acc">#1001</span>
+          </div>
+          <div class="receipt-row">
+            <span class="r-label">Account Holder</span>
+            <span class="r-val font-bold" id="receipt-name">Pradumn Prajapati</span>
+          </div>
+          <div class="receipt-row full-width">
+            <span class="r-label">Ledger Description</span>
+            <span class="r-val" id="receipt-desc">—</span>
+          </div>
+          <div class="receipt-row full-width">
+            <span class="r-label">Engine Audit Trail</span>
+            <span class="r-val mono text-muted">Node Indexed via C++ Binary Search Tree</span>
+          </div>
+        </div>
+
+        <div class="receipt-footer">
+          <div class="qr-mockup">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="7" y="7" width="1" height="1"/><rect x="18" y="7" width="1" height="1"/><rect x="7" y="18" width="1" height="1"/><rect x="17" y="17" width="2" height="2"/><line x1="10" y1="12" x2="14" y2="12"/><line x1="12" y1="10" x2="12" y2="14"/></svg>
+          </div>
+          <p class="receipt-security-note">Secured by 13-Bucket Separate Chaining Hash Table. Validated official banking record.</p>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="receipt-close-btn" class="btn btn-secondary">Close</button>
+        <button type="button" id="receipt-print-btn" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Print Receipt</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH VIEW (Executive Modern Dual-Pane Login Page) -->
   <div id="auth-view" class="auth-wrapper">
-    <div class="auth-card">
-      <div class="auth-header">
-        <div class="brand-logo">
-          <div class="logo-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="auth-container-grid">
+      <!-- Left Showcase Panel -->
+      <div class="auth-showcase-panel">
+        <div class="brand-logo showcase-logo">
+          <div class="logo-icon hero-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 21h18"/>
               <path d="M3 10h18"/>
               <path d="M5 6l7-3 7 3"/>
@@ -51,98 +164,189 @@
           </div>
           <div class="brand-text">
             <h2>Bank Sphere</h2>
-            <span class="badge-tag">C++ BST Core Engine</span>
-          </div>
-        </div>
-        <p class="auth-subtitle">Enterprise Retail & Commercial Banking Portal</p>
-      </div>
-
-      <!-- Role Tabs -->
-      <div class="role-selector" id="role-selector">
-        <button class="role-tab active" data-role="customer" id="role-tab-customer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Customer
-        </button>
-        <button class="role-tab" data-role="staff" id="role-tab-staff">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          Staff Desk
-        </button>
-        <button class="role-tab" data-role="admin" id="role-tab-admin">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Administrator
-        </button>
-      </div>
-
-      <!-- Error Alert -->
-      <div id="auth-error" class="alert-box alert-error hidden">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="auth-error-text">Invalid credentials. Please try again.</span>
-      </div>
-
-      <!-- Customer Login Form -->
-      <form id="customer-login-form" class="auth-form">
-        <div class="form-group">
-          <label for="login-account-number">Account Number</label>
-          <div class="input-icon-wrap">
-            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-            <input type="number" id="login-account-number" placeholder="e.g. 1001" required autocomplete="username">
+            <span class="badge-tag">C++ BST Core v2.0</span>
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="login-password">Password / PIN</label>
-          <div class="input-icon-wrap">
-            <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input type="password" id="login-password" placeholder="Enter account password" required autocomplete="current-password">
-            <button type="button" id="toggle-pwd-btn" class="pwd-toggle-btn" aria-label="Toggle password visibility">
-              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div class="showcase-content">
+          <div class="live-pill">
+            <span class="pulse-dot"></span>
+            <span>Enterprise Core Banking Engine Active</span>
+          </div>
+          <h1 class="showcase-headline">High-Performance Financial Ledger System</h1>
+          <p class="showcase-desc">
+            Engineered with native <strong>Binary Search Tree</strong> indexing for instantaneous account resolution and 
+            <strong>Separate Chaining Hash Tables</strong> for cryptographic security.
+          </p>
+
+          <div class="showcase-features-grid">
+            <div class="feat-box">
+              <div class="feat-icon blue">⚡</div>
+              <div>
+                <h5>O(log N) Efficiency</h5>
+                <p>Near-instant logarithmic search across hundreds of indexed accounts</p>
+              </div>
+            </div>
+            <div class="feat-box">
+              <div class="feat-icon green">🔒</div>
+              <div>
+                <h5>Salted Hash Security</h5>
+                <p>Zero plain-text credential persistence with separate chaining</p>
+              </div>
+            </div>
+            <div class="feat-box">
+              <div class="feat-icon purple">📊</div>
+              <div>
+                <h5>Atomic Transactions</h5>
+                <p>Strict ledger audits and persistent file verification logs</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="showcase-stats-strip">
+            <div class="s-stat">
+              <span class="s-stat-val mono">380+</span>
+              <span class="s-stat-label">Active BST Nodes</span>
+            </div>
+            <div class="s-stat-divider"></div>
+            <div class="s-stat">
+              <span class="s-stat-val mono">&lt;0.02ms</span>
+              <span class="s-stat-label">Lookup Latency</span>
+            </div>
+            <div class="s-stat-divider"></div>
+            <div class="s-stat">
+              <span class="s-stat-val mono">100%</span>
+              <span class="s-stat-label">Memory Resilient</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Auth Form Card -->
+      <div class="auth-card">
+        <div class="auth-card-top">
+          <h3>Sign In to Your Account</h3>
+          <p class="auth-subtitle">Select your banking role and enter credentials</p>
+        </div>
+
+        <!-- Role Tabs -->
+        <div class="role-selector" id="role-selector">
+          <button class="role-tab active" data-role="customer" id="role-tab-customer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Customer
+          </button>
+          <button class="role-tab" data-role="staff" id="role-tab-staff">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Staff Desk
+          </button>
+          <button class="role-tab" data-role="admin" id="role-tab-admin">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Administrator
+          </button>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="auth-error" class="alert-box alert-error hidden">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="auth-error-text">Invalid credentials. Please try again.</span>
+        </div>
+
+        <!-- Customer Login Form -->
+        <form id="customer-login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-account-number">Account Number</label>
+            <div class="input-icon-wrap">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <input type="number" id="login-account-number" placeholder="e.g. 1001" required autocomplete="username">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password / PIN</label>
+            <div class="input-icon-wrap">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="login-password" placeholder="Enter account password" required autocomplete="current-password">
+              <button type="button" id="toggle-pwd-btn" class="pwd-toggle-btn" aria-label="Toggle password visibility">
+                <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block">
+            <span class="btn-text">Sign In to Dashboard</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </form>
+
+        <!-- Staff / Admin Quick Access View -->
+        <div id="staff-admin-form" class="auth-form hidden">
+          <div class="portal-info-box">
+            <h4 id="portal-title">Authorized Staff Portal</h4>
+            <p id="portal-desc">Access teller operations, fund management, and transaction overrides powered by the native C++ BST module.</p>
+          </div>
+          <button type="button" id="portal-direct-btn" class="btn btn-primary btn-block">
+            <span id="portal-btn-text">Enter Staff Terminal</span>
+            <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+
+        <!-- Quick Demo Accounts (Portfolio Feature) -->
+        <div class="demo-accounts-tray">
+          <div class="demo-tray-header">
+            <div class="demo-tray-title-wrap">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <span>Demo Accounts (Click to Auto-fill)</span>
+            </div>
+            <span class="demo-badge-hint">One-Click Login</span>
+          </div>
+          <div class="demo-chips" id="demo-chips">
+            <!-- Demo Chip 1: Primary Demo - Pradumn Prajapati -->
+            <button type="button" class="demo-chip primary-chip" data-acc="1001" data-pwd="Pradumn@123">
+              <div class="demo-chip-avatar">PP</div>
+              <div class="demo-chip-info">
+                <span class="chip-name">Pradumn Prajapati</span>
+                <span class="chip-acc">#1001 • Primary Demo (₹1.00 Cr)</span>
+              </div>
+              <span class="chip-arrow">→</span>
+            </button>
+
+            <!-- Demo Chip 2: Personal Account - Pradumn Prajapati -->
+            <button type="button" class="demo-chip" data-acc="1008" data-pwd="Pradumn@123">
+              <div class="demo-chip-avatar alt">PP</div>
+              <div class="demo-chip-info">
+                <span class="chip-name">Pradumn Prajapati</span>
+                <span class="chip-acc">#1008 • Personal Savings (₹75K)</span>
+              </div>
+              <span class="chip-arrow">→</span>
+            </button>
+
+            <!-- Demo Chip 3: Om Tripathi -->
+            <button type="button" class="demo-chip" data-acc="1002" data-pwd="Om@123">
+              <div class="demo-chip-avatar">OT</div>
+              <div class="demo-chip-info">
+                <span class="chip-name">Om Tripathi</span>
+                <span class="chip-acc">#1002 • Business Account</span>
+              </div>
+              <span class="chip-arrow">→</span>
+            </button>
+
+            <!-- Demo Chip 4: Hrishabh -->
+            <button type="button" class="demo-chip" data-acc="1003" data-pwd="Hrishabh@123">
+              <div class="demo-chip-avatar">HK</div>
+              <div class="demo-chip-info">
+                <span class="chip-name">Hrishabh Kasaudhan</span>
+                <span class="chip-acc">#1003 • Retail Account</span>
+              </div>
+              <span class="chip-arrow">→</span>
             </button>
           </div>
         </div>
 
-        <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block">
-          <span class="btn-text">Sign In to Account</span>
-          <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </form>
-
-      <!-- Staff / Admin Quick Access View -->
-      <div id="staff-admin-form" class="auth-form hidden">
-        <div class="portal-info-box">
-          <h4 id="portal-title">Authorized Staff Portal</h4>
-          <p id="portal-desc">Access teller operations, fund management, and transaction overrides powered by the native C++ BST module.</p>
-        </div>
-        <button type="button" id="portal-direct-btn" class="btn btn-primary btn-block">
-          <span id="portal-btn-text">Enter Staff Terminal</span>
-          <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </div>
-
-      <!-- Quick Demo Accounts (Portfolio Feature) -->
-      <div class="demo-accounts-tray">
-        <div class="demo-tray-header">
-          <span>Demo Accounts (Click to Auto-fill)</span>
-        </div>
-        <div class="demo-chips" id="demo-chips">
-          <button type="button" class="demo-chip" data-acc="1001" data-pwd="Rajan@123">
-            <span class="chip-acc">#1001</span>
-            <span class="chip-name">Rajan Soni</span>
-          </button>
-          <button type="button" class="demo-chip" data-acc="1002" data-pwd="Om@123">
-            <span class="chip-acc">#1002</span>
-            <span class="chip-name">Om Tripathi</span>
-          </button>
-          <button type="button" class="demo-chip" data-acc="1003" data-pwd="Hrishabh@123">
-            <span class="chip-acc">#1003</span>
-            <span class="chip-name">Hrishabh K.</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="auth-footer">
-        <div class="security-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>Secured with Hash Table Separate Chaining & Salted Hashing</span>
+        <div class="auth-footer">
+          <div class="security-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Secured with Hash Table Separate Chaining & Salted Hashing</span>
+          </div>
         </div>
       </div>
     </div>
@@ -178,11 +382,11 @@
           </button>
           <button class="nav-item" data-page="page-deposit">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            <span>Deposit</span>
+            <span>Deposit Funds</span>
           </button>
           <button class="nav-item" data-page="page-withdraw">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/></svg>
-            <span>Withdraw</span>
+            <span>Withdraw Cash</span>
           </button>
           <button class="nav-item" data-page="page-transfer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
@@ -225,13 +429,17 @@
         </div>
       </nav>
 
+      <!-- Sidebar User Profile Footer with Direct Name/Profile Trigger -->
       <div class="sidebar-footer">
-        <div class="user-profile-badge">
-          <div class="avatar" id="nav-avatar">RS</div>
+        <div class="user-profile-badge" id="sidebar-user-trigger" title="Click to view or edit profile name">
+          <div class="avatar" id="nav-avatar">PP</div>
           <div class="user-meta">
-            <span class="user-name" id="nav-user-name">Rajan Soni</span>
+            <span class="user-name" id="nav-user-name">Pradumn Prajapati</span>
             <span class="user-id" id="nav-user-id">Account #1001</span>
           </div>
+          <button type="button" class="profile-quick-edit-icon" id="quick-edit-name-btn" title="Edit Profile Name">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
         </div>
         <button id="logout-btn" class="btn btn-outline-danger btn-logout" title="Logout">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -251,12 +459,15 @@
         <div class="header-right">
           <div class="system-status-indicator">
             <span class="pulse-dot"></span>
-            <span class="status-label">BST Engine Online</span>
+            <span class="status-label">C++ BST Core Online</span>
           </div>
           <div class="quick-balance-chip" id="header-balance-chip">
-            <span class="chip-label">Balance:</span>
-            <span class="chip-val" id="header-balance">₹0.00</span>
+            <span class="chip-label">Ledger:</span>
+            <span class="chip-val mono font-bold" id="header-balance">₹0.00</span>
           </div>
+          <button type="button" class="header-profile-btn" id="header-profile-shortcut" title="Edit Profile Name">
+            <div class="header-avatar" id="header-avatar-badge">PP</div>
+          </button>
         </div>
       </header>
 
@@ -265,23 +476,63 @@
 
         <!-- PAGE: CUSTOMER DASHBOARD -->
         <section id="page-dashboard" class="content-page active">
-          <!-- Hero Banner & Balance Card -->
+          <!-- Executive Welcome Banner -->
+          <div class="welcome-banner">
+            <div class="welcome-text">
+              <div class="welcome-tag">
+                <span class="status-indicator-live"></span>
+                <span>Verified Platinum Member • KYC Tier 1</span>
+              </div>
+              <h2 class="welcome-title">Welcome back, <span id="welcome-user-name">Pradumn Prajapati</span> 👋</h2>
+              <p class="welcome-desc">Your accounts are operating with zero-latency in-memory C++ BST indexing and persistent transactional logs.</p>
+            </div>
+            <div class="welcome-actions">
+              <button type="button" class="btn btn-outline-primary" id="open-profile-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <span>Edit Profile Name</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="quick-statement-btn" data-action="go-history">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Audit Statement</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero Banner & Balance Card + 3D Virtual Card Grid -->
           <div class="dashboard-hero-grid">
+            <!-- Balance Card -->
             <div class="hero-card balance-card">
               <div class="card-glow"></div>
               <div class="balance-card-header">
                 <div>
                   <span class="card-eyebrow">Available Ledger Balance</span>
                   <div class="balance-amount-wrap">
-                    <h2 class="main-balance" id="dash-balance">₹0.00</h2>
+                    <h2 class="main-balance mono" id="dash-balance">₹0.00</h2>
                   </div>
                 </div>
                 <div class="account-badge-pill" id="dash-account-type-pill">Savings</div>
               </div>
+
+              <!-- Quick Mini Stat Pills -->
+              <div class="balance-meta-strip">
+                <div class="b-meta-item">
+                  <span class="b-label">Monthly Inflow</span>
+                  <span class="b-val text-success mono">+₹1,45,000.00</span>
+                </div>
+                <div class="b-meta-item">
+                  <span class="b-label">Monthly Outflow</span>
+                  <span class="b-val text-danger mono">-₹32,450.00</span>
+                </div>
+                <div class="b-meta-item">
+                  <span class="b-label">Solvency Ratio</span>
+                  <span class="b-val text-warning mono">100%</span>
+                </div>
+              </div>
+
               <div class="balance-card-footer">
                 <div class="account-id-info">
                   <span class="label">Account Number</span>
-                  <span class="value mono" id="dash-account-num">#1001</span>
+                  <span class="value mono font-bold" id="dash-account-num">#1001</span>
                 </div>
                 <div class="account-status-info">
                   <span class="label">Status</span>
@@ -294,9 +545,54 @@
               </div>
             </div>
 
-            <!-- Quick Action Cards Grid -->
+            <!-- Virtual 3D Titanium Bank Card -->
+            <div class="virtual-card-wrapper">
+              <div class="luxury-debit-card" id="virtual-card">
+                <div class="card-glass-glow"></div>
+                <div class="card-top-row">
+                  <div class="card-bank-brand">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 6l7-3 7 3"/><path d="M4 10v11"/><path d="M20 10v11"/></svg>
+                    <span>Bank Sphere</span>
+                  </div>
+                  <div class="card-tier-badge">PLATINUM WORLD ELITE</div>
+                </div>
+                <div class="card-chip-contactless">
+                  <div class="card-emv-chip">
+                    <span class="chip-circuit"></span>
+                  </div>
+                  <div class="contactless-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 16.5a5 5 0 0 1 0-9"/><path d="M12 19a8.5 8.5 0 0 0 0-14"/><path d="M15.5 21.5a12 12 0 0 0 0-19"/></svg>
+                  </div>
+                </div>
+                <div class="card-number-row">
+                  <span class="card-number-masked mono" id="card-masked-num">•••• •••• •••• 1001</span>
+                  <button type="button" class="card-copy-btn" id="card-copy-num-btn" title="Copy Account Number">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                </div>
+                <div class="card-bottom-row">
+                  <div class="card-holder-col">
+                    <span class="card-label">CARDHOLDER NAME</span>
+                    <span class="card-holder-name" id="card-holder-name">PRADUMN PRAJAPATI</span>
+                  </div>
+                  <div class="card-expiry-col">
+                    <span class="card-label">EXPIRES</span>
+                    <span class="card-expiry-val mono">08/29</span>
+                  </div>
+                  <div class="card-network-logo">
+                    <span class="mastercard-circle circle-red"></span>
+                    <span class="mastercard-circle circle-gold"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions & Frequent Contacts -->
+          <div class="dashboard-middle-grid">
+            <!-- Quick Actions Panel -->
             <div class="quick-actions-panel">
-              <h3 class="section-title">Quick Actions</h3>
+              <h3 class="section-title">Quick Financial Operations</h3>
               <div class="actions-grid">
                 <button class="action-tile" data-action="go-deposit">
                   <div class="tile-icon green">
@@ -327,18 +623,56 @@
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
                   </div>
                   <span class="tile-title">Statement</span>
-                  <span class="tile-sub">View ledger records</span>
+                  <span class="tile-sub">View ledger audit</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Contacts Send Strip -->
+            <div class="card quick-contacts-card">
+              <div class="card-header-flex">
+                <div>
+                  <h3 class="card-heading">Frequent Beneficiaries</h3>
+                  <p class="card-subheading">1-Click instant transfer routing</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-primary" data-action="go-transfer">Send Funds</button>
+              </div>
+              <div class="contacts-grid" id="quick-contacts-list">
+                <button type="button" class="contact-bubble" data-acc="1002" data-name="Om Tripathi">
+                  <div class="c-avatar">OT</div>
+                  <span class="c-name">Om Tripathi</span>
+                  <span class="c-acc mono">#1002</span>
+                </button>
+                <button type="button" class="contact-bubble" data-acc="1003" data-name="Hrishabh">
+                  <div class="c-avatar">HK</div>
+                  <span class="c-name">Hrishabh K.</span>
+                  <span class="c-acc mono">#1003</span>
+                </button>
+                <button type="button" class="contact-bubble" data-acc="1004" data-name="Pranjal">
+                  <div class="c-avatar">PT</div>
+                  <span class="c-name">Pranjal T.</span>
+                  <span class="c-acc mono">#1004</span>
+                </button>
+                <button type="button" class="contact-bubble" data-acc="1005" data-name="Shashwat">
+                  <div class="c-avatar">SP</div>
+                  <span class="c-name">Shashwat P.</span>
+                  <span class="c-acc mono">#1005</span>
+                </button>
+                <button type="button" class="contact-bubble" data-acc="1007" data-name="Rajesh">
+                  <div class="c-avatar">RJ</div>
+                  <span class="c-name">Rajesh</span>
+                  <span class="c-acc mono">#1007</span>
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Recent Transactions Widget -->
+          <!-- Recent Transactions Widget with Print Receipt Option -->
           <div class="card recent-tx-card">
             <div class="card-header-flex">
               <div>
                 <h3 class="card-heading">Recent Transactions</h3>
-                <p class="card-subheading">Persisted file records from C++ FileUtils logger</p>
+                <p class="card-subheading">Persisted file records from C++ FileUtils logger (Click row to view receipt voucher)</p>
               </div>
               <button class="btn btn-sm btn-secondary" data-action="go-history">View All</button>
             </div>
@@ -350,10 +684,11 @@
                     <th>Description</th>
                     <th>Type</th>
                     <th class="text-right">Amount</th>
+                    <th class="text-center">Voucher</th>
                   </tr>
                 </thead>
                 <tbody id="dash-tx-table-body">
-                  <tr><td colspan="4" class="text-center empty-state">Loading transactions...</td></tr>
+                  <tr><td colspan="5" class="text-center empty-state">Loading transactions...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -366,23 +701,29 @@
             <div class="card-header-flex border-bottom">
               <div>
                 <h3 class="card-heading">Customer Account Specifications</h3>
-                <p class="card-subheading">Data Structure: Binary Search Tree Node (AccountNode)</p>
+                <p class="card-subheading">Data Structure: Binary Search Tree Node (AccountNode) with persistent storage</p>
               </div>
-              <span class="status-tag active" id="details-status-badge">Active Account</span>
+              <div class="header-actions-row">
+                <span class="status-tag active" id="details-status-badge">Active Account</span>
+                <button type="button" class="btn btn-sm btn-primary" id="det-edit-profile-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  <span>Edit / Give Name</span>
+                </button>
+              </div>
             </div>
 
             <div class="details-grid">
               <div class="detail-item">
                 <span class="detail-label">Full Customer Name</span>
-                <span class="detail-value" id="det-name">—</span>
+                <span class="detail-value font-bold" id="det-name">Pradumn Prajapati</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Account Number</span>
-                <span class="detail-value mono" id="det-account-num">—</span>
+                <span class="detail-value mono font-bold" id="det-account-num">#1001</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Account Classification</span>
-                <span class="detail-value" id="det-type">—</span>
+                <span class="detail-value" id="det-type">Savings Account</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Available Balance</span>
@@ -390,7 +731,7 @@
               </div>
               <div class="detail-item col-span-2">
                 <span class="detail-label">Registered Physical Address</span>
-                <span class="detail-value" id="det-address">—</span>
+                <span class="detail-value" id="det-address">Sector Alpha 1, Greater Noida, UP 201310</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Minimum Balance Requirement</span>
@@ -398,7 +739,7 @@
               </div>
               <div class="detail-item">
                 <span class="detail-label">Security & Authentication</span>
-                <span class="detail-value text-muted">Protected by Hash Table (13 Buckets)</span>
+                <span class="detail-value text-muted">Salted Hash Table (13 Buckets, Chaining)</span>
               </div>
             </div>
           </div>
@@ -433,6 +774,7 @@
                 <button type="button" class="amt-chip" data-amt="1000">+ ₹1,000</button>
                 <button type="button" class="amt-chip" data-amt="5000">+ ₹5,000</button>
                 <button type="button" class="amt-chip" data-amt="10000">+ ₹10,000</button>
+                <button type="button" class="amt-chip" data-amt="50000">+ ₹50,000</button>
               </div>
 
               <div class="calculated-preview-box">
@@ -480,6 +822,7 @@
                 <button type="button" class="amt-chip-withdraw" data-amt="1000">₹1,000</button>
                 <button type="button" class="amt-chip-withdraw" data-amt="2000">₹2,000</button>
                 <button type="button" class="amt-chip-withdraw" data-amt="5000">₹5,000</button>
+                <button type="button" class="amt-chip-withdraw" data-amt="10000">₹10,000</button>
               </div>
 
               <div class="calculated-preview-box">
@@ -526,6 +869,13 @@
                 </div>
               </div>
 
+              <div class="amount-quick-chips">
+                <button type="button" class="amt-chip-transfer" data-amt="500">₹500</button>
+                <button type="button" class="amt-chip-transfer" data-amt="1000">₹1,000</button>
+                <button type="button" class="amt-chip-transfer" data-amt="2500">₹2,500</button>
+                <button type="button" class="amt-chip-transfer" data-amt="5000">₹5,000</button>
+              </div>
+
               <div class="calculated-preview-box">
                 <span class="calc-label">Your Balance After Transfer:</span>
                 <span class="calc-val mono" id="transfer-preview-bal">₹0.00</span>
@@ -564,10 +914,11 @@
                     <th>Description</th>
                     <th>Type</th>
                     <th class="text-right">Amount</th>
+                    <th class="text-center">Receipt Voucher</th>
                   </tr>
                 </thead>
                 <tbody id="history-table-body">
-                  <tr><td colspan="4" class="text-center empty-state">Loading ledger...</td></tr>
+                  <tr><td colspan="5" class="text-center empty-state">Loading ledger...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -641,7 +992,7 @@
               <div class="card-header-flex border-bottom">
                 <div>
                   <h3 class="card-heading">Quick Account Lookup</h3>
-                  <p class="card-subheading">Direct BST search (`tree.findAccount`)</p>
+                  <p class="card-subheading">Direct BST search (<code>tree.findAccount</code>)</p>
                 </div>
               </div>
               <div class="form-body">

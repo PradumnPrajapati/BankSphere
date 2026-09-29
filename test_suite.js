@@ -48,7 +48,7 @@ async function runTestSuite() {
 
   // 1. Test Login (valid)
   console.log('Testing Authentication (C++ AuthTable)...');
-  const loginRes = await request('/api/login', 'POST', { accountNumber: 1001, password: 'Rajan@123' });
+  const loginRes = await request('/api/login', 'POST', { accountNumber: 1001, password: 'Pradumn@123' });
   assert(loginRes.status === 200 && loginRes.data.success && loginRes.data.account.accountNumber === 1001, 'Valid credentials login to Account 1001');
 
   // 2. Test Login (invalid password)
@@ -58,7 +58,7 @@ async function runTestSuite() {
   // 3. Test Account Lookup
   console.log('\nTesting Account Lookup (C++ BST Search)...');
   const accRes = await request('/api/account/1001');
-  assert(accRes.status === 200 && accRes.data.account.name === 'Rajan Soni', 'Fetched account #1001 name correctly: ' + accRes.data.account.name);
+  assert(accRes.status === 200 && accRes.data.account.name === 'Pradumn Prajapati', 'Fetched account #1001 name correctly: ' + accRes.data.account.name);
   const initialBal = accRes.data.account.balance;
 
   // 4. Test Deposit
@@ -73,7 +73,7 @@ async function runTestSuite() {
 
   // 6. Test Minimum Balance enforcement
   console.log('\nTesting Minimum Balance Policy...');
-  const excessiveWith = await request('/api/withdraw', 'POST', { accountNumber: 1001, amount: 999999 });
+  const excessiveWith = await request('/api/withdraw', 'POST', { accountNumber: 1001, amount: initialBal + 50000 });
   assert(!excessiveWith.data.success, 'Excessive withdrawal properly rejected by C++ minimum balance check');
 
   // 7. Test Fund Transfer

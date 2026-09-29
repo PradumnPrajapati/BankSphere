@@ -127,6 +127,47 @@ const server = http.createServer(async (req, res) => {
         }
     }
 
+    // Update Account Profile (Name & Address)
+    if (req.method === 'POST' && pathname === '/api/account/update-profile') {
+        const { accountNumber, name, address } = await parseBody(req);
+        if (!accountNumber || !name) {
+            return sendJson(res, 400, { success: false, error: 'Account number and name are required' });
+        }
+        try {
+            const accFilePath = path.join(BANK_DIR, 'data', 'accounts.txt');
+            if (fs.existsSync(accFilePath)) {
+                let content = fs.readFileSync(accFilePath, 'utf8');
+                const lines = content.split(/\r?\n/);
+                let found = false;
+                const updatedLines = lines.map(line => {
+                    if (!line.trim()) return line;
+                    const parts = line.split('|');
+                    if (parts[0] === String(accountNumber)) {
+                        found = true;
+                        parts[1] = String(name).trim();
+                        if (address !== undefined && String(address).trim()) {
+                            parts[2] = String(address).trim();
+                        }
+                        return parts.join('|');
+                    }
+                    return line;
+                });
+                if (found) {
+                    fs.writeFileSync(accFilePath, updatedLines.join('\n'), 'utf8');
+                    const result = await callBridge(['--get-account', String(accountNumber)]);
+                    return sendJson(res, 200, {
+                        success: true,
+                        message: 'Profile updated successfully',
+                        account: result.success ? result.account : { accountNumber, name, address }
+                    });
+                }
+            }
+            return sendJson(res, 404, { success: false, error: 'Account not found' });
+        } catch (e) {
+            return sendJson(res, 500, { success: false, error: e.message });
+        }
+    }
+
     // Deposit
     if (req.method === 'POST' && pathname === '/api/deposit') {
         const { accountNumber, amount } = await parseBody(req);

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <ctime>
 #include <functional>
+#include <iomanip>
 
 AccountBST::AccountBST() : root(nullptr) {
     loadData();
@@ -313,7 +314,7 @@ void AccountBST::saveAccounts(AccountNode* root, std::ofstream& file) {
          << root->name << "|"
          << root->address << "|"
          << root->passwordHash << "|"
-         << root->balance << "|"
+         << std::fixed << std::setprecision(2) << root->balance << "|"
          << root->accountType << "|"
          << root->isActive << "\n";
 
